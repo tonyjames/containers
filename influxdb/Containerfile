@@ -1,0 +1,19 @@
+FROM registry.access.redhat.com/ubi9-minimal
+
+LABEL org.opencontainers.image.authors="Tony James <tony@redhat.com>"
+
+RUN microdnf upgrade -y && \
+    microdnf install -y shadow-utils util-linux && \
+    microdnf clean all
+
+COPY influxdb.repo /etc/yum.repos.d/influxdb.repo
+
+RUN microdnf install -y influxdb2 influxdb2-cli && \
+    microdnf clean all && \
+    gpgconf --kill all 
+
+COPY entrypoint.sh /entrypoint.sh
+
+ENTRYPOINT ["/entrypoint.sh"]
+
+CMD ["/usr/bin/influxd"]
