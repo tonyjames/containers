@@ -2,4 +2,5 @@
 
 set -eo pipefail
 
-exec setpriv --reuid=telegraf --regid=telegraf --init-groups "$@"
+exec /usr/bin/telegraf \
+  "${@}"

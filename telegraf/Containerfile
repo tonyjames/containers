@@ -2,18 +2,15 @@ FROM registry.access.redhat.com/ubi9-minimal
 
 LABEL org.opencontainers.image.authors="Tony James <tony@redhat.com>"
 
-RUN microdnf upgrade -y && \
-    microdnf install -y util-linux && \
-    microdnf clean all
-
 COPY influxdata.repo /etc/yum.repos.d/
 
-RUN microdnf install -y telegraf && \
+RUN microdnf install -y procps-ng util-linux && \
+    microdnf install -y telegraf && \
     microdnf clean all && \
     gpgconf --kill all
 
-COPY entrypoint.sh /entrypoint.sh
+USER telegraf
+
+COPY entrypoint.sh /
 
 ENTRYPOINT ["/entrypoint.sh"]
-
-CMD ["/usr/bin/telegraf"]

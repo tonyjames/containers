@@ -2,4 +2,7 @@
 
 set -eo pipefail
 
-exec setpriv --reuid=influxdb --regid=influxdb --init-groups "$@"
+exec /usr/bin/influxd \
+  --bolt-path=/var/lib/influxdb/influxd.bolt \
+  --engine-path=/var/lib/influxdb/engine \
+  "${@}"
